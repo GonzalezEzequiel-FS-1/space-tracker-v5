@@ -1,7 +1,8 @@
 const {
   Galaxy
 } = require("../src/models")
-// Show all resources
+// GET All Galaxies
+
 const index = async (req, res) => {
   //Search all Galaxies from the DB
   //Method findAll() used
@@ -29,7 +30,7 @@ const index = async (req, res) => {
 
 }
 
-// Show resource
+// GET by ID 
 const show = async (req, res) => {
   // Respond with a single object and 2xx code
   const id = req.params.id;
@@ -60,19 +61,40 @@ const show = async (req, res) => {
   }
 }
 
-// Create a new resource
-const create = (req, res) => {
+// POST new Galaxy
+const create = async (req, res) => {
+  const { name, size, desc} = req.params.body
+  if(!name || !size || !desc){
+    return res.status(400).send({
+      success:false,
+      message:`${req.method} failed. Please provide all required fields`
+    })
+  }
+  const newGalaxy = await Galaxy.create({
+    name,
+    size,
+    desc
+  })
+  if( name || size || desc ){
+    return res.status(200).json({
+      success:true,
+      message:`New Galaxy created`,
+      data:newGalaxy
+    })
+  }
   // Issue a redirect with a success 2xx code
+  
+
   res.redirect(`/galaxies`, 201)
 }
 
-// Update an existing resource
+// PUT changes into a Galaxy
 const update = (req, res) => {
   // Respond with a single resource and 2xx code
   res.status(200).json(`/galaxies/${req.params.id}`, )
 }
 
-// Remove a single resource
+// DELETE Galaxy (by ID)
 const remove = async (req, res) => {
   const id = Number(req.params.id);
   if (!id || Number.isNaN(id) || id <= 0) {
