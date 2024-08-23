@@ -63,31 +63,35 @@ const show = async (req, res) => {
 
 // POST new Galaxy
 const create = async (req, res) => {
-  const name = req.params.Name
-  const size = req.params.Size
-  const desc = req.params.Description
-// if(!name || !size || !desc){
-//    return res.status(400).send({
-//      success:false,
-//      message:`${req.method} failed. Please provide all required fields`
-//    })
-//  }
-  
-  const newGalaxy = await Galaxy.create({
-    Name:name,
-    Size:size,
-    Description:desc
-  })
+  const { name, size, description } = req.body;
 
-  if( name || size || desc ){
-    return res.redirect(200).json({
-      success:true,
-      message:`New Galaxy created`,
-      data:newGalaxy
-    })
+  if (!name || !size || !description) {
+    return res.status(400).send({
+      success: false,
+      message: 'Please provide all required fields: name, size, and description',
+    });
   }
-//
-}
+
+  try {
+    const newGalaxy = await Galaxy.create({
+      name,
+      size,
+      description,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'New galaxy created',
+      data: newGalaxy,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: `Error creating galaxy: ${error.message}`,
+    });
+  }
+};
+
 
 // PUT changes into a Galaxy
 const update = (req, res) => {
