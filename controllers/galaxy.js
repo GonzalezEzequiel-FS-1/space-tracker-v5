@@ -70,22 +70,21 @@ const create = async (req, res) => {
       message:`${req.method} failed. Please provide all required fields`
     })
   }
+  
   const newGalaxy = await Galaxy.create({
     name,
     size,
     desc
   })
+
   if( name || size || desc ){
-    return res.status(200).json({
+    return res.redirect(200).json({
       success:true,
       message:`New Galaxy created`,
       data:newGalaxy
     })
   }
-  // Issue a redirect with a success 2xx code
-  
-
-  res.redirect(`/galaxies`, 201)
+//
 }
 
 // PUT changes into a Galaxy
