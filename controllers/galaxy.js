@@ -63,18 +63,20 @@ const show = async (req, res) => {
 
 // POST new Galaxy
 const create = async (req, res) => {
-  const { name, size, desc} = req.params.body
-  if(!name || !size || !desc){
-    return res.status(400).send({
-      success:false,
-      message:`${req.method} failed. Please provide all required fields`
-    })
-  }
+  const name = req.params.Name
+  const size = req.params.Size
+  const desc = req.params.Description
+// if(!name || !size || !desc){
+//    return res.status(400).send({
+//      success:false,
+//      message:`${req.method} failed. Please provide all required fields`
+//    })
+//  }
   
   const newGalaxy = await Galaxy.create({
-    name,
-    size,
-    desc
+    Name:name,
+    Size:size,
+    Description:desc
   })
 
   if( name || size || desc ){
